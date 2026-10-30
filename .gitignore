@@ -1,0 +1,9 @@
+/glade
+/glade.exe
+
+# Made by go run ./demo.
+/demo/glade.db*
+/demo/incidents/
+
+# The results of a glade run.
+glade.db*

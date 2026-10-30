@@ -1,0 +1,39 @@
+# An example: three example sites. Try it with
+#
+#   go run . -config example/glade.toml
+#
+# then open http://127.0.0.1:8080/.
+
+title = "spinney status"
+# url = "https://status.example.com/"   # the public address, for the feed's links
+listen = "127.0.0.1:8080"
+interval = "1m"              # between rounds of checks; at least 10s
+database = "glade.db"        # beside this file; up to 90 days of results
+incidents = "incidents"      # beside this file; one .md file each
+
+# A command run when a check changes state, with GLADE_CHECK,
+# GLADE_STATE, GLADE_PREVIOUS and GLADE_NOTE set. For instance, with ntfy:
+#
+# on_change = 'curl -s -d "$GLADE_CHECK is $GLADE_STATE $GLADE_NOTE" https://ntfy.sh/your-topic'
+
+[[check]]
+name = "example.com"
+url = "https://example.com/"
+contains = "Example Domain"
+
+[[check]]
+name = "example.org"
+url = "https://example.org/"
+contains = "Example Domain"
+slow = "2s"                  # slower than this is degraded
+
+[[check]]
+name = "example.net"
+url = "https://example.net/"
+timeout = "10s"              # the default
+
+# A port that must accept connections:
+#
+# [[check]]
+# name = "SSH"
+# tcp = "git.example.com:22"

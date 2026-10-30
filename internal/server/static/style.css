@@ -1,0 +1,129 @@
+/* glade's page: clrs.cc colours, light and dark following the system.
+   Inlined into the page, so it is one request and works without the
+   network beyond it. */
+:root {
+  color-scheme: light dark;
+  --fg: #111111;
+  --bg: #ffffff;
+  --muted: #666666;
+  --line: #dddddd;
+  --link: #0074d9;
+  --up: #2ecc40;
+  --partial: #ff851b;
+  --down: #ff4136;
+  --none: #dddddd;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #dddddd;
+    --bg: #111111;
+    --muted: #aaaaaa;
+    --line: #333333;
+    --link: #7fdbff;
+    --none: #333333;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+main {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+a { color: var(--link); }
+h1 { font-size: 1.4rem; font-weight: 600; margin: 0 0 1.5rem; }
+h2, h3 { font-size: 1rem; font-weight: 600; margin: 0; }
+
+/* The state colours, for dots, the summary's edge and the bars. */
+.s-up { --c: var(--up); }
+.s-degraded, .s-partial { --c: var(--partial); }
+.s-down { --c: var(--down); }
+.s-none { --c: var(--none); }
+
+.dot {
+  display: inline-block;
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.summary {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-left: 0.35rem solid var(--c);
+  border-radius: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+.summary p { margin: 0; }
+.headline { font-size: 1.15rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; }
+.headline .dot { background: var(--c); }
+.checked { color: var(--muted); font-size: 0.875rem; margin-top: 0.25rem !important; }
+
+.problem { color: var(--down); }
+
+.incident.open {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-left: 0.35rem solid var(--partial);
+  border-radius: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+.when { color: var(--muted); font-size: 0.875rem; margin: 0.15rem 0 0.5rem; }
+.incident p:last-child { margin-bottom: 0; }
+
+.checks {
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+}
+.check { padding: 1rem 1.25rem; }
+.check + .check { border-top: 1px solid var(--line); }
+.head { display: flex; align-items: center; gap: 0.6rem; }
+.uptime { margin-left: auto; color: var(--muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+.state { color: var(--muted); font-size: 0.875rem; margin: 0.15rem 0 0.75rem; overflow-wrap: anywhere; }
+
+.bars {
+  display: flex;
+  gap: 2px;
+  height: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.bars li { flex: 1; border-radius: 1px; background: var(--c); }
+.axis {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin: 0.35rem 0 0;
+}
+.axis .narrow { display: none; }
+
+/* On a phone, the last 30 bars at most. */
+@media (max-width: 40rem) {
+  .bars li:nth-last-child(n+31) { display: none; }
+  .axis .wide { display: none; }
+  .axis .narrow { display: inline; }
+}
+
+.past { margin-top: 2.5rem; }
+.past > h2 { font-size: 1.1rem; margin-bottom: 1rem; }
+.past .incident { padding: 0.75rem 0; border-top: 1px solid var(--line); }
+
+footer {
+  margin-top: 2.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}

@@ -1,0 +1,34 @@
+# The demo: run go run ./demo first, which writes glade.db and incidents/
+# beside this file, then
+#
+#   go run . -config demo/glade.toml
+#
+# and open http://127.0.0.1:8080/. The checks carry on live from the made-up
+# history, and are set so that each state shows: the example sites up,
+# example.net degraded (no HTTPS check answers within its slow), and the
+# mail server down (nothing listens on that port).
+
+title = "spinney status (demo)"
+listen = "127.0.0.1:8080"
+interval = "10s"            # the least glade allows, so the demo page stays live
+
+[[check]]
+name = "example.com"
+url = "https://example.com/"
+contains = "Example Domain"
+
+[[check]]
+name = "example.org"
+url = "https://example.org/"
+contains = "Example Domain"
+slow = "2s"
+
+[[check]]
+name = "example.net"
+url = "https://example.net/"
+slow = "50ms"                # below any HTTPS round trip, so always degraded
+
+[[check]]
+name = "Mail"
+tcp = "127.0.0.1:2"
+timeout = "3s"

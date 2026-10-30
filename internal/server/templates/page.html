@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{/* Reloads itself after every round of checks: live, without JavaScript. */ -}}
+<meta http-equiv="refresh" content="{{.Refresh}}">
+<title>{{.Title}}</title>
+<meta name="description" content="{{.Summary}}">
+<link rel="alternate" type="application/atom+xml" title="{{.Title}}: incidents" href="/feed.xml">
+<style>{{.Style}}</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>{{.Title}}</h1>
+</header>
+
+<section class="summary s-{{or .State "none"}}">
+  <p class="headline"><span class="dot"></span>{{.Summary}}</p>
+  <p class="checked">{{if .Checked.IsZero}}No checks yet{{else}}Checked {{ago .Checked .Now}} ago, every {{.Interval}}{{end}}</p>
+</section>
+
+{{- with .Problem}}
+<p class="problem">{{.}}</p>
+{{- end}}
+
+{{- range .Open}}
+<article class="incident open" id="{{.Slug}}">
+  <h2>{{.Title}}</h2>
+  <p class="when">Since {{when .Date}}</p>
+  {{.Body}}
+</article>
+{{- end}}
+
+<section class="checks">
+{{- range .Checks}}
+  <div class="check">
+    <div class="head">
+      <span class="dot s-{{if .Last}}{{.Last.State}}{{else}}none{{end}}"></span>
+      <h2>{{.Name}}</h2>
+      {{- with .Uptime}}
+      <span class="uptime" title="Uptime over the last {{$.Span}}">{{.}}</span>
+      {{- end}}
+    </div>
+    <p class="state">{{.Text}}</p>
+    <ol class="bars" aria-hidden="true">
+    {{- range .Bars}}<li class="s-{{.State}}" title="{{.Label}}"></li>{{end -}}
+    </ol>
+    <p class="axis"><span class="wide">{{$.From}}</span><span class="narrow">{{$.Narrow}}</span><span>{{$.To}}</span></p>
+  </div>
+{{- end}}
+</section>
+
+{{- if .Past}}
+<section class="past">
+  <h2>Past incidents</h2>
+{{- range .Past}}
+  <article class="incident" id="{{.Slug}}">
+    <h3>{{.Title}}</h3>
+    <p class="when">{{when .Date}} to {{when .Resolved}}</p>
+    {{.Body}}
+  </article>
+{{- end}}
+</section>
+{{- end}}
+
+<footer>
+  <a href="/feed.xml">Incidents feed</a> · <a href="/status.json">status.json</a> · Times in UTC · Made with <a href="https://github.com/obk/glade">glade</a>
+</footer>
+
+</main>
+</body>
+</html>
